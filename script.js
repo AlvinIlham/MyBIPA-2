@@ -4708,7 +4708,7 @@ const AKHIR = [
       isiK.appendChild(inpMars);
 
       /* Tombol Tautan Mars */
-      var tbTautan = E("button", "tbl-kecil", "🔗 Tautan Mars");
+      var tbTautan = E("button", "tbl-kecil", "🔗 Ganti Mars (Drive / YouTube)");
       tbTautan.type = "button";
       tbTautan.style.marginLeft = "6px";
       tbTautan.addEventListener("click", function () {
@@ -5120,12 +5120,20 @@ const AKHIR = [
         kosong.style.display = jawab.querySelectorAll(".keping").length ? "none" : "block";
       }
       acak(s.kata).forEach(function (k) {
-        var t = E("button", "keping", '<span class="keping-teks">' + k + '</span>'); t.type = "button";
+        var t = E("div", "keping", '<span class="keping-teks">' + k + '</span>');
+        t.setAttribute("role", "button");
+        t.setAttribute("tabindex", "0");
         t.addEventListener("click", function () {
           if (modeSunting) return;
           if (t.parentNode === bank) jawab.appendChild(t); else bank.appendChild(t);
           jawab.classList.remove("benar", "salah");
           segarkan();
+        });
+        t.addEventListener("keydown", function (ev) {
+          if ((ev.key === "Enter" || ev.key === " ") && !modeSunting) {
+            ev.preventDefault();
+            t.click();
+          }
         });
         bank.appendChild(t);
       });
@@ -6494,7 +6502,7 @@ const AKHIR = [
     /* Kecualikan tombol kontrol sistem, textarea, umpan, dan halaman pantauan/kelas */
     if (el.closest("textarea") || el.closest(".umpan") ||
         el.closest("#pantauan") || el.closest("#kelas")) return;
-    if (el.closest("button")) return;
+    if (el.closest("button:not(.keping)")) return;
     var sid = "s" + (idxSid++);
     el.dataset.sid = sid;
     el.dataset.teksAsli = el.innerHTML;
